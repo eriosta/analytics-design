@@ -63,6 +63,7 @@ See below
 ### Relationship between models and theory
 - Interpretive models: Data (<)-> Model <-> Theory
 - Substitute models: Data (<)-> Model
+- Final conumdrom... there are competing models; different models of the same target system that have different prediction
 
 ## What is a good research question?
 Text here
