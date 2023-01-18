@@ -38,10 +38,13 @@ Elements of models:
 - Approximation is the key characteristic
 
 ### Other models
+
 #### Analog models
 - Similar enough to target system but contain different elements, structured
+
 #### Toy models
 - An extreme type of Idealized model, extreme simplification or distortion; no nuances or details
+
 #### Minimal models
 - Extreme simplification, related to Toy models; no real overlap between reality and model
 
@@ -50,6 +53,16 @@ Elements of models:
 
 #### Data models
 - Idealized version of data collected from immediate observation (i.e., raw data)
+
+#### Interpretive models
+See below
+
+#### Substitute models
+See below
+
+### Relationship between models and theory
+- Interpretive models: Data (<)-> Model <-> Theory
+- Substitute models: Data (<)-> Model
 
 ## What is a good research question?
 Text here
