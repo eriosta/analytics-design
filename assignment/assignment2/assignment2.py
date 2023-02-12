@@ -5,9 +5,23 @@ import statsmodels.api as sm
 from scipy.stats import kstest
 from scipy.stats import mannwhitneyu
 import numpy as np 
+import seaborn as sns
 
 # Load the data
 df = pd.read_excel("assignment/assignment2/privacy 1.xlsx", header=0)
+
+
+fig, axs = plt.subplots(1, 2, figsize=(10, 4))
+
+# histogram of like_know
+axs[0].hist(df['like_know'], edgecolor='black', bins=5)
+axs[0].set_title('Like/Know')
+
+# histogram of commodity
+axs[1].hist(df['commodity'], edgecolor='black', bins=5)
+axs[1].set_title('Commodity')
+
+plt.show()
 
 
 def analyze_distribution(df, column):
@@ -30,22 +44,18 @@ def analyze_distribution(df, column):
     kstest_results = kstest(column, 'norm')
     print("Kolmogorov-Smirnov test results:", kstest_results)
 
-analyze_distribution(df, 'like_know')
+for col in ['gender','classic_coke']:
+    analyze_distribution(df, 'like_know')
 
-#perform Mann-Whitney U test
+    #perform Mann-Whitney U test
 
-group1 = df.query('classic_coke == 0')['like_know'].dropna().values
-group2 = df.query('classic_coke == 1')['like_know'].dropna().values
+    group1 = df.query(col + ' == 0')['like_know'].dropna().values
+    group2 = df.query(col + ' == 1')['like_know'].dropna().values
 
-u, p = mannwhitneyu(group1, group2)
-print("Mann-Whitney U test results: u-statistic = {:.3f}, p-value = {:.10f}".format(u, p))
+    u, p = mannwhitneyu(group1, group2)
+    print(f'Analysis for {col} vs. like_know')
+    print("Mann-Whitney U test results: u-statistic = {:.3f}, p-value = {:.10f}".format(u, p))
 
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-# Load the data into a DataFrame
-df = pd.read_excel("assignment/assignment2/privacy 1.xlsx", header=0)
 
 # Create a subplot with two violin plots
 fig, ax = plt.subplots(1, 2, figsize=(10, 5))
