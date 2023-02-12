@@ -10,7 +10,6 @@ import seaborn as sns
 # Load the data
 df = pd.read_excel("assignment/assignment2/privacy 1.xlsx", header=0)
 
-
 fig, axs = plt.subplots(1, 2, figsize=(10, 4))
 
 # histogram of like_know
