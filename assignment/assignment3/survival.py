@@ -178,7 +178,7 @@ class SurvivalTable:
 
         """
         self.df = pd.DataFrame(data).sort_values(by='time')
-        self.survival_table = pd.DataFrame(columns=['N', 'D', 'S', 'S_prob', 'D_prob'])
+        self.survival_table = pd.DataFrame(columns=['N', 'D', 'S', 'S_prob', 'D_prob','Probability of dying', 'Probability of living'])
 
     def build_table(self):
         """
@@ -211,8 +211,13 @@ class SurvivalTable:
             s_prob = s / N
             d_prob = d / N
 
+            # Calculation string
+            calculation_str_s_prob = str(s) + ' / ' + str(N) + ' = ' + str(round(s_prob,ndigits=2))
+            calculation_str_d_prob = str(d) + ' / ' + str(N) +  ' = ' + str(round(d_prob,ndigits=2))
+
+
             # Add the values to the survival table
-            self.survival_table.loc[t, :] = [N, d, s, s_prob, d_prob]
+            self.survival_table.loc[t, :] = [N, d, s, s_prob, d_prob, calculation_str_s_prob, calculation_str_d_prob]
 
             # Update the number of patients at risk (N) for the next time point
             N = n
@@ -225,7 +230,7 @@ class SurvivalTable:
         Print the survival table to the console.
 
         """
-        print(self.survival_table)
+        print(self.survival_table.drop(['S_prob','D_prob'],axis=1))
 
     def plot_survival_curve(self):
         """
@@ -323,6 +328,19 @@ class AdvancedSurvivalAnalysis:
             The type of multiple testing correction to apply. Can be 'bonferroni', 'holm-sidak', 'holm',
             'simes-hochberg', 'hommel', 'fdr_bh', 'fdr_by', 'fdr_tsbh', or None. Default is 'bonferroni'.
 
+            The different methods for adjusting the p-values are:
+
+            - Bonferroni: adjust the p-values by multiplying them by the number of comparisons
+            - Holm-Sidak: uses a step-down approach, similar to the Bonferroni method but more powerful
+            - Holm: a simpler version of the Holm-Sidak method that only considers the p-values in increasing order
+            - Simes-Hochberg: a modified Bonferroni method that uses a different set of weights
+            - Hommel: a more powerful method than the Bonferroni and Holm-Sidak methods that uses a sequential approach
+            - FDR (Benjamini-Hochberg): controls the expected proportion of false discoveries among the rejected null hypotheses
+            - FDR (Benjamini-Yekutieli): similar to the Benjamini-Hochberg method but with a different calculation for the critical value
+            - FDR (two-stage Benjamini-Hochberg): a more powerful FDR correction method that controls for the proportion of false discoveries but also accounts for the correlation structure among the p-values.
+            
+            In general, Bonferroni correction is the most conservative method as it adjusts the p-values by the number of comparisons. Holm-Sidak, Holm, and Hommel are also conservative methods, but are more powerful than Bonferroni. The FDR methods are less conservative and more powerful than the other methods. The choice of correction method should depend on the specific situation and the desired balance between type I and type II errors.
+
         Returns
         -------
         None
@@ -330,6 +348,9 @@ class AdvancedSurvivalAnalysis:
         pairs = list(combinations(self.groups, 2))
         p_values = []
         test_statistics = []
+        print("")
+        print("Multiple Pairwise Comparisons with Bonferroni Correction")
+        print("========================================================")
         for pair in pairs:
             subset1 = self.df[self.df['group'] == pair[0]]
             subset2 = self.df[self.df['group'] == pair[1]]
@@ -343,13 +364,9 @@ class AdvancedSurvivalAnalysis:
             for i, pair in enumerate(pairs):
                 if rejected[i]:
                     stat = test_statistics[i]
-                    print(f'Group {pair[0]} and Group {pair[1]} have significantly different survival curves.')
-                    # print(f'Logrank Test Statistic: {stat:.2f}')
+                    print(f'Group {pair[0]} and Group {pair[1]} have significantly different survival curves. Corrected p-value: {p_values_corrected[i]:.4f}')
         else:
             for i, pair in enumerate(pairs):
                 if p_values[i] < alpha:
                     stat = test_statistics[i]
-                    print(f'Group {pair[0]} and Group {pair[1]} have significantly different survival curves.')
-                    # print(f'Logrank Test Statistic: {stat:.2f}')
-
-
+                    print(f'Group {pair[0]} and Group {pair[1]} have significantly different survival curves. Uncorrected p-value: {p_values[i]:.4f}')

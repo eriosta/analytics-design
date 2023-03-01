@@ -1,17 +1,24 @@
 # Assignment 3: Survival Analysis
 
-1.	 You are analyzing a 16 day study of patients who have Krusty the Clown disease.  Your data includes a subject ID, their survival time and a status.  A status of 0 means they are alive while a status of 1 means they died of the disease.  
-a.	Construct a survival table similar to the one in the lecture for the data.  You will show your work within the table – if there is some division like 1/5 then show that like 1/5=.2 and if there is some multiplication then show the numbers being multiplied and the result  e.g.  .1 * 4 =0.4
-b.	Plot a survival curve for the probabilities you generate in part a.
+## Tasks
+1. Construct a survival table and plot a survival curve for a dataset of patients with Krusty the Clown disease.
+2. For a dataset of patients with La Traviata disease, perform the following:
+   1. Draw a survival plot showing survival curves for three different drugs.
+   2. Test for an overall effect of any of the drugs on survival.
+   3. Compare survival curves for each drug with each other and adjust for multiple group comparisons.
 
+## Approach
+The code here defines two classes, `SurvivalTable` and `AdvancedSurvivalAnalysis`.
 
+The `SurvivalTable` class takes in survival data in the form of a dictionary or pandas DataFrame and creates a survival table from it. The `build_table` method is used to build the survival table by calculating the number of patients at risk, the number of deaths, the number of patients who survived past a certain time, and the probability of survival and death. The `print_table` method prints the survival table to the console, and the `plot_survival_curve` and `median_survival_time` methods plot the survival curve using the Kaplan-Meier estimator and calculate the median survival time, respectively.
 
-2.	You are studying three different new drugs that may help slow the progress of La Traviata disease which compels people to sing opera until they exhaust themselves and die.  Do the following:
-a.	Draw a survival plot that shows the survival curves for all three drugs.
-b.	Test to see if overall there is an effect of any of the drugs on survival taken as a global set.
-c.	Compare the survival curves for each of the three drugs with each other (three comparisons) and see if any if the curves are different from each other.  Note that you should be sure to adjust for multiple group comparisons.
+The `AdvancedSurvivalAnalysis` class is used to perform advanced survival analysis on a dataset. The `plot_survival_curves` method draws a survival plot that shows the survival curves for all groups. The `test_global_effect` method tests to see if overall there is an effect of any of the drugs on survival taken as a global set. The `test_pairwise_effects` method compares the survival curves for each group and sees if any of the curves are different from each other.
 
-The data for question 2 can be found on the next pages.  You are free to use whatever platform you want – Python, R, SAS, Stata, SPSS, etc.  except no Excel – I hate Excel!  
+## Results
+We analyzed a dataset of patients with La Traviata disease and investigated the effect of three different drugs on patient survival.
 
-Be sure to include your answers to question 2, your output and code!
-Data for part 2 of exercise #3.  Data format is Group#  time  event (0=no event, 1=event)
+First, we plotted survival curves for each drug using the Kaplan-Meier method. The survival curves showed that patients on drug 2 had the highest survival rate, followed by patients on drug 3, and patients on drug 1 had the lowest survival rate.
+
+Next, we performed a Log-Rank test to determine if there was an overall effect of any of the drugs on survival. The Log-Rank test revealed a p-value of 1.6240630634437227e-62, indicating a significant difference between at least one pair of survival curves.
+
+To further investigate the pairwise differences between the drugs, we performed multiple pairwise comparisons using the Bonferroni correction to adjust for multiple group comparisons. The results showed that there was a significant difference in survival curves between drug 1 and drug 2, with a corrected p < 0.00001. There was also a significant difference in survival curves between drug 2 and drug 3, with a corrected p-value of 0.0002. However, there was no significant difference in survival curves between drug 1 and drug 3, with a corrected p-value of 0.3691.
