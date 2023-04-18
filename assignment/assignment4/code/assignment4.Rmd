@@ -1,0 +1,102 @@
+---
+title: "assignment4"
+author: "Eri"
+date: '2023-03-20'
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(factoextra)
+library(FactoMineR)
+library(gplots)
+```
+
+## Data
+
+```{r cars}
+data <- read.csv("data.csv",row.names = 1)
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+dt <- as.table(as.matrix(data))
+# 2. Graph
+balloonplot(t(dt), main ="Race vs. Pizza", xlab ="", ylab="",
+            label = TRUE, show.margins = FALSE)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+# Grand total
+n <- sum(data)
+# Standardized residuals
+chisq <- chisq.test(data)
+residuals <- chisq$residuals/sqrt(n)
+# Number of dimensions
+nb.axes <- min(nrow(residuals)-1, ncol(residuals)-1)
+# Singular value decomposition
+res.svd <- svd(residuals, nu = nb.axes, nv = nb.axes)
+res.svd
+
+sv <- res.svd$d[1:nb.axes] # singular value
+u <-res.svd$u
+v <- res.svd$v
+
+# Eigenvalues
+eig <- sv^2
+# Variances in percentage
+variance <- eig*100/sum(eig)
+# Cumulative variances
+cumvar <- cumsum(variance)
+eig<- data.frame(eig = eig, variance = variance,
+                     cumvariance = cumvar)
+head(eig)
+
+barplot(eig[, 2], names.arg=1:nrow(eig), 
+       main = "Variances",
+       xlab = "Dimensions",
+       ylab = "Percentage of variances",
+       col ="steelblue")
+# Add connected line segments to the plot
+lines(x = 1:nrow(eig), eig[, 2], 
+      type="b", pch=19, col = "red")
+```
+
+```{r}
+library(ggpubr)
+res.ca = CA(data,graph=F)
+fviz_screeplot(res.ca, addlabels = TRUE, ylim = c(0, 100))
+```
+```{r}
+# repel= TRUE to avoid text overlapping (slow if many point)
+fviz_ca_biplot(res.ca, repel = TRUE)
+```
+
+```{r}
+# Contributions of rows to dimension 1
+fviz_contrib(res.ca, choice = "row", axes = 1, top = 10)
+# Contributions of rows to dimension 2
+fviz_contrib(res.ca, choice = "row", axes = 2, top = 10)
+# Contributions of rows to dimension 1
+fviz_contrib(res.ca, choice = "col", axes = 1, top = 10)
+# Contributions of rows to dimension 2
+fviz_contrib(res.ca, choice = "col", axes = 2, top = 10)
+```
+
+
+## g.	Find an example in the correspondence plot where the angle between row and column values suggests a strong association – draw the lines from the origin to these two points on the plot.
+Strongest association: Angle between Black and Papa Johns
+
+```{r}
+fviz_ca_biplot(res.ca, map ="colgreen", arrow = c(T,T),
+               repel = TRUE)
+```
+
