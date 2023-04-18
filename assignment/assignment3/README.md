@@ -1,5 +1,10 @@
 # Assignment 3: Survival Analysis
 
+## Quick Links
+Go to [source code](https://github.com/eriosta/analytics-design/blob/main/assignment/assignment3/survival.py) to explore the `SurvivalTable` and `AdvancedSurvivalAnalysis` classes.
+
+Go to [Jupyter Notebook](https://github.com/eriosta/analytics-design/blob/main/assignment/assignment3/assignment3.ipynb) for implementation and results.
+
 ## Tasks
 1. Construct a survival table and plot a survival curve for a dataset of patients with Krusty the Clown disease.
 2. For a dataset of patients with La Traviata disease, perform the following:
