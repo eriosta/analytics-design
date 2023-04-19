@@ -44,14 +44,20 @@ class BeerConsumptionForecast:
         :return: A float representing the adjusted R-squared value.
         """
         self.fit_ucm()
-        fitted_values = self.results.fittedvalues
-        residuals = self.data['consumption'] - fitted_values
+        self.fitted_values = self.results.fittedvalues
+        residuals = self.data['consumption'] - self.fitted_values
         ss_res = np.sum(residuals ** 2)
         ss_tot = np.sum((self.data['consumption'] - np.mean(self.data['consumption'])) ** 2)
         r_squared = 1 - (ss_res / ss_tot)
         n = len(self.data)
         k = self.results.df_model + 1  # Adding 1 to account for the intercept
         adj_r2 = 1 - ((1 - r_squared) * (n - 1) / (n - k - 1))
+
+        # print the full table with fitted_values and data['consumption']
+        # set the display options to show all rows
+        pd.set_option('display.max_rows', None)
+        print(pd.concat([self.fitted_values, self.data['consumption']], axis=1))
+        
         return adj_r2
 
     def component_significance(self):
