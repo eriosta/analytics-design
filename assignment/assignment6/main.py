@@ -55,8 +55,8 @@ class BeerConsumptionForecast:
 
         # print the full table with fitted_values and data['consumption']
         # set the display options to show all rows
-        pd.set_option('display.max_rows', None)
-        print(pd.concat([self.fitted_values, self.data['consumption']], axis=1))
+        # pd.set_option('display.max_rows', None)
+        # print(pd.concat([self.fitted_values, self.data['consumption']], axis=1))
         
         return adj_r2
 
